@@ -21,6 +21,17 @@ SmartClass is an AI-driven system designed to automate attendance tracking and m
 - **Database:** SQLite  
 - **Hardware:** ESP32 microcontroller for IoT integration  
 - **AI/ML:** OpenCV for facial recognition
+
+# 🔨 WorkFlow
+- **Teacher Scan:** The teacher scans their NFC card to activate the session.
+
+- **Student Scan:** Students scan their NFC cards at the entrance.
+
+- **Data Processing:** The system verifies card IDs and logs attendance.
+
+- **Facial Recognition Trigger:** After 2 minutes, facial recognition starts tracking students.
+
+- **Database Update:** Attendance data is stored for report generation.
 ## 📂 Project Structure  
 
 ```sh
