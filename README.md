@@ -16,31 +16,31 @@ Frontend: HTML, CSS​
 Database: SQLite​
 Hardware: ESP32 microcontroller for IoT integration​
 AI/ML: OpenCV for facial recognition​
-# 📂Project Structure 
-` ` `sh
-SmartClass/  
-│── backend/  
-│   │── app.py                  # Main Flask application  
-│   │── database.py              # Database connection and operations  
-│   │── face_recognition.py      # Face recognition model and functions  
-│── frontend/  
-│   │── index.html               # Frontend user interface  
-│   │── styles.css               # CSS for styling the interface  
-│── hardware/  
-│   │── esp32_code.ino           # Code for ESP32 microcontroller integration  
-│── models/  
-│   │── trained_model.pkl        # Pre-trained face recognition model  
-│── reports/  
-│   │── attendance_reports/      # Generated attendance reports  
-│   │── behavior_reports/        # Generated behavior reports  
-│── static/  
-│   │── images/                  # Stored images for recognition  
-│── templates/  
-│   │── dashboard.html           # Dashboard page  
-│── README.md                    # Project documentation  
-│── requirements.txt              # Dependencies for the project  
-│── LICENSE                       # License file
-` ` `
+## 📂 Project Structure  
+
+```sh
+SmartClass/
+├── backend/
+│   ├── app.py                  # Main Flask application
+│   ├── database.py              # Database connection and operations
+│   ├── face_recognition.py      # Face recognition model and functions
+├── frontend/
+│   ├── index.html               # Frontend user interface
+│   ├── styles.css               # CSS for styling the interface
+├── hardware/
+│   ├── esp32_code.ino           # Code for ESP32 microcontroller integration
+├── models/
+│   ├── trained_model.pkl        # Pre-trained face recognition model
+├── reports/
+│   ├── attendance_reports/      # Generated attendance reports
+│   ├── behavior_reports/        # Generated behavior reports
+├── static/
+│   ├── images/                  # Stored images for recognition
+├── templates/
+│   ├── dashboard.html           # Dashboard page
+├── README.md                    # Project documentation
+├── requirements.txt              # Dependencies for the project
+├── LICENSE                       # License file
 ## ⚡ Installation & Setup
 
 ### 1️⃣ Clone the Repository
