@@ -1,4 +1,4 @@
-# SmartClass
+j# SmartClass
 An AI-powered system that automates attendance tracking and student behavior monitoring in classrooms
 SmartClass: AI-Powered Classroom Management System
 # 📌 Overview
@@ -41,6 +41,7 @@ SmartClass/
 ├── README.md                    # Project documentation
 ├── requirements.txt              # Dependencies for the project
 ├── LICENSE                       # License file
+` ` `
 ## ⚡ Installation & Setup
 
 ### 1️⃣ Clone the Repository
