@@ -41,7 +41,7 @@ SmartClass/
 ├── README.md                    # Project documentation
 ├── requirements.txt              # Dependencies for the project
 ├── LICENSE                       # License file
-` ` `
+```
 ## ⚡ Installation & Setup
 
 ### 1️⃣ Clone the Repository
