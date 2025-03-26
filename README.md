@@ -25,7 +25,7 @@ git clone https://github.com/Mirza-Muhammed/SmartClass.git
 cd SmartClass
 
 ### 2️⃣ Set Up Virtual Environment 
-```sh
+```
 python -m venv venv
 source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
 ### 3️⃣ Install Dependencies:
