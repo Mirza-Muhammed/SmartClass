@@ -24,14 +24,16 @@ AI/ML: OpenCV for facial recognition​
 git clone https://github.com/Mirza-Muhammed/SmartClass.git
 cd SmartClass
 
-Set Up Virtual Environment 
+### 2️⃣ Set Up Virtual Environment 
+```sh
 python -m venv venv
 source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
-Install Dependencies:
-
+### 3️⃣ Install Dependencies:
+```sh
 pip install -r requirements.txt
-Run the Application:
 
+### 4️⃣ Run the Application:
+```sh
 python app.py
 The application will be accessible at http://127.0.0.1:5000/.
 
