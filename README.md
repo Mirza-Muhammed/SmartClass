@@ -18,8 +18,11 @@ Hardware: ESP32 microcontroller for IoT integration​
 AI/ML: OpenCV for facial recognition​
 ## ⚡ Installation & Setup
 ### 1️⃣Clone the Repository
+'''sh
 git clone https://github.com/Mirza-Muhammed/SmartClass.git
 cd SmartClass
+
+
 Set Up Virtual Environment 
 python -m venv venv
 source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
