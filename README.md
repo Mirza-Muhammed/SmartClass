@@ -48,8 +48,9 @@ SmartClass/
 
 ```sh
 git clone https://github.com/Mirza-Muhammed/SmartClass.git
-cd SmartClass
 ```
+cd SmartClass
+
 
 ### 2️⃣ Set Up Virtual Environment 
 
@@ -65,8 +66,9 @@ pip install -r requirements.txt
 ### 4️⃣ Run the Application:
 ```sh
 python app.py
-The application will be accessible at http://127.0.0.1:5000/.
 ```
+The application will be accessible at http://127.0.0.1:5000/.
+
 # 📄 Documentation
 For detailed documentation and user guides, please refer to the project's GitHub repository.
 
