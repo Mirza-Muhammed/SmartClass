@@ -1,0 +1,4 @@
+Name: yasin
+Attendance: 2025-02-16 13:02:09 - Present
+Phone Usage: 2025-02-16 13:02:28 - Phone Detected
+Sleep Detection: 2025-02-16 13:03:04 - Sleeping Detected

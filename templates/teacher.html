@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Teacher's Portal</h1>
+        <h2>Student Data</h2>
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>UID</th>
+                    <th>GENDER</th>
+                    <th>ATTENDANCE</th>
+                    <th>REPORT</th>
+                </tr>
+            </thead>
+            <tbody id="students-table"></tbody>
+        </table>
+
+        <p id="error-message" class="error-message" style="display: none;"></p>
+
+        <script>
+            function fetchData(){
+                $.ajax({
+                    url: '/api/teacher_dashboard',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        let studentsTable = $('#students-table');
+
+                        studentsTable.empty();
+
+                        if (data.students.length === 0) {
+                        studentsTable.append('<tr><td colspan="6">No students registered.</td></tr>');
+                    } else {
+                        data.students.forEach(function(student) {
+                            studentsTable.append(`
+                                <tr>
+                                    <td>${student.id}</td>
+                                    <td>${student.name}</td>
+                                    <td>${student.uid}</td>
+                                    <td>${student.gender}</td>
+                                    <td>${student.attendance}</td>
+                                    <td><a href="/view_report/${student.id}">View Report</a></td>
+                                </tr>
+                            `);
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#error-message').text("Error fetching data: " + error).show();
+                }
+            });
+        }
+        setInterval(fetchData, 5000);
+        fetchData();
+        </script>
+       
+        <hr style="margin-top: 50px; margin-bottom: 50px;">
+        <a href="{{ url_for('logout') }}" class="updateBtn">Logout</a>
+    </div>
+</body>
+</html>

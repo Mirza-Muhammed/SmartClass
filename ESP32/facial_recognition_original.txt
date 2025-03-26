@@ -1,0 +1,141 @@
+import torch
+import cv2
+import os
+import io
+import contextlib
+import pandas as pd
+from datetime import datetime
+from deepface import DeepFace
+from app import db, Student, BehavioralAnalysis,app 
+
+# Load YOLOv5 for phone detection
+model = torch.hub.load("ultralytics/yolov5", "yolov5s", force_reload=True)
+
+# Load Haar Cascade for eye detection (used for sleep detection)
+eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
+
+# Initialize webcam
+cap = cv2.VideoCapture(0)
+
+# Sleep detection settings
+eye_closed_counter = {}
+sleep_detection_threshold = 3  # Adjust threshold as needed
+
+# Track students who have already been processed
+processed_students = set()
+marked_absent = set()  # Track students already marked absent
+
+# Load registered students inside the Flask app context
+with app.app_context():
+    registered_students = {student.name: student for student in Student.query.all()}
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Camera frame not received. Exiting...")
+        break
+
+    # Convert frame for object detection
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = model(rgb_frame)
+    detections = results.pandas().xyxy[0]
+
+    phone_detections = detections[detections["name"] == "cell phone"]
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    eyes = eye_cascade.detectMultiScale(gray, 1.3, 5)  # Detect eyes
+
+    detected_students = set()  # Track detected students
+
+    with contextlib.redirect_stdout(io.StringIO()):  # Suppress matrix output
+        try:
+            res = DeepFace.find(frame, db_path="database", enforce_detection=False, model_name="VGG-Face", distance_metric="cosine")
+        except Exception as e:
+            print(f"DeepFace Error: {e}")
+            res = []
+
+    #  Detect students and mark presence
+    if isinstance(res, list) and len(res) > 0:
+        for df in res:
+            if isinstance(df, pd.DataFrame) and not df.empty and "identity" in df.columns:
+                for identity_path in df["identity"].dropna().tolist():
+                    name = os.path.normpath(identity_path).split(os.sep)[-2]
+
+                    if name in registered_students:
+                        student = registered_students[name]
+                        detected_students.add(name)  # Track detected students
+
+                        # Mark attendance only if `time_in` is already set
+                        with app.app_context():
+                            if student.time_in and name not in processed_students:
+                                print(f" {name} is present (No changes to attendance).")
+                                processed_students.add(name)  # Avoid multiple logs
+
+                        # Extract bounding box coordinates (xmin, ymin, xmax, ymax)
+                        if all(col in df.columns for col in ["source_x", "source_y", "source_w", "source_h"]):
+                            xmin = int(df["source_x"].iloc[0])
+                            ymin = int(df["source_y"].iloc[0])
+                            xmax = xmin + int(df["source_w"].iloc[0])
+                            ymax = ymin + int(df["source_h"].iloc[0])
+                        else:
+                            print(f" Face bounding box missing for {name}")
+                            continue  # Skip iteration if no bounding box
+
+                        # Check if a record already exists for this student
+                        with app.app_context():
+                            existing_record = BehavioralAnalysis.query.filter_by(student_id=student.id).first()
+
+                            #  Sleep Detection (Eye Closure)
+                            if name not in eye_closed_counter:
+                                eye_closed_counter[name] = 0
+
+                            #  Check if at least one eye is detected within the bounding box
+                            person_eyes = [eye for eye in eyes if (xmin <= eye[0] <= xmax and ymin <= eye[1] <= ymax)]
+
+                            if not person_eyes:
+                                eye_closed_counter[name] += 1
+                            else:
+                                eye_closed_counter[name] = 0  # Reset only if eyes are detected
+
+                            if eye_closed_counter[name] >= sleep_detection_threshold:
+                                if existing_record:
+                                    if not existing_record.sleep_detected:  # Update only if not already set
+                                        print(f"Updating sleep detection for {name}.")
+                                        existing_record.sleep_detected = True
+                                        existing_record.timestamp = datetime.now()
+                                else:
+                                    print(f"Creating new record for {name} with sleep detected.")
+                                    existing_record = BehavioralAnalysis(student_id=student.id, sleep_detected=True, timestamp=datetime.now())
+                                    db.session.add(existing_record)
+
+                            # Phone Usage Detection
+                            for _, phone in phone_detections.iterrows():
+                                if existing_record:
+                                    if not existing_record.phone_usage_detected:  # Update only if not already set
+                                        print(f"Updating phone usage for {name}.")
+                                        existing_record.phone_usage_detected = True
+                                        existing_record.timestamp = datetime.now()
+                                else:
+                                    print(f"Creating new record for {name} with phone usage detected.")
+                                    existing_record = BehavioralAnalysis(student_id=student.id, phone_usage_detected=True, timestamp=datetime.now())
+                                    db.session.add(existing_record)
+
+                            db.session.commit()
+
+    # Mark absent students AFTER processing detections
+    with app.app_context():
+        for student in registered_students.values():
+            if student.name not in detected_students and student.time_in and student.name not in marked_absent:
+                print(f"Marking {student.name} as absent.")
+                student = db.session.query(Student).filter_by(id=student.id).first()  # Refresh object from DB
+                student.time_in = None  # Remove attendance if student not detected
+                db.session.commit()
+                marked_absent.add(student.name)  #Ensure they are not repeatedly marked absent
+
+    #Display real-time detection frame
+    cv2.imshow("Face Recognition, Sleep & Phone Detection", frame)
+
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+cap.release()
+cv2.destroyAllWindows()

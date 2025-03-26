@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Registered Users and Attendance Data</h1>
+
+    <h2>Registered Users</h2>
+    <h3>Teachers</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+            </tr>
+        </thead>
+        <tbody id="teachers-table"></tbody>
+    </table>
+
+    <h3>Students</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+            </tr>
+        </thead>
+        <tbody id="students-table"></tbody>
+    </table>
+
+    <h2>Attendance Records</h2>
+    <h3>Teachers</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+            </tr>
+        </thead>
+        <tbody id="teachers-attendance"></tbody>
+    </table>
+
+    <h3>Students</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+            </tr>
+        </thead>
+        <tbody id="students-attendance"></tbody>
+    </table>
+
+    <p id="error-message" class="error-message" style="display: none;"></p>
+
+    <script>
+        function fetchData() {
+            $.ajax({
+                url: '/api/view_data',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    let teachersTable = $('#teachers-table');
+                    let studentsTable = $('#students-table');
+                    let teachersAttendance = $('#teachers-attendance');
+                    let studentsAttendance = $('#students-attendance');
+
+                    teachersTable.empty();
+                    studentsTable.empty();
+                    teachersAttendance.empty();
+                    studentsAttendance.empty();
+
+                    // Display registered teachers
+                    if (data.teachers.length === 0) {
+                        teachersTable.append('<tr><td colspan="3">No teachers registered.</td></tr>');
+                    } else {
+                        data.teachers.forEach(function(teacher) {
+                            teachersTable.append(`
+                                <tr>
+                                    <td>${teacher.name}</td>
+                                    <td>${teacher.uid}</td>
+                                    <td>${teacher.gender}</td>
+                                </tr>
+                            `);
+                        });
+                    }
+
+                    // Display registered students
+                    if (data.students.length === 0) {
+                        studentsTable.append('<tr><td colspan="3">No students registered.</td></tr>');
+                    } else {
+                        data.students.forEach(function(student) {
+                            studentsTable.append(`
+                                <tr>
+                                    <td>${student.name}</td>
+                                    <td>${student.uid}</td>
+                                    <td>${student.gender}</td>
+                                </tr>
+                            `);
+                        });
+                    }
+
+                    // Display teacher attendance (only if they have scanned)
+                    if (data.teacher_attendance.length === 0) {
+                        teachersAttendance.append('<tr><td colspan="6">No teacher attendance records found.</td></tr>');
+                    } else {
+                        data.teacher_attendance.forEach(function(record) {
+                            teachersAttendance.append(`
+                                <tr>
+                                    <td>${record.name}</td>
+                                    <td>${record.uid}</td>
+                                    <td>${record.gender}</td>
+                                    <td>${record.date}</td>
+                                    <td>${record.time_in || 'N/A'}</td>
+                                    <td>${record.time_out || 'N/A'}</td>
+                                </tr>
+                            `);
+                        });
+                    }
+
+                    // Display student attendance (only if they have scanned)
+                    if (data.student_attendance.length === 0) {
+                        studentsAttendance.append('<tr><td colspan="6">No student attendance records found.</td></tr>');
+                    } else {
+                        data.student_attendance.forEach(function(record) {
+                            studentsAttendance.append(`
+                                <tr>
+                                    <td>${record.name}</td>
+                                    <td>${record.uid}</td>
+                                    <td>${record.gender}</td>
+                                    <td>${record.date}</td>
+                                    <td>${record.time_in || 'N/A'}</td>
+                                    <td>${record.time_out || 'N/A'}</td>
+                                </tr>
+                            `);
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#error-message').text("Error fetching data: " + error).show();
+                }
+            });
+        }
+
+        setInterval(fetchData, 5000);
+        fetchData();
+    </script>
+</body>
+</html>

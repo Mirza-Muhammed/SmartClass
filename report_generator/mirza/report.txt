@@ -1,0 +1,7 @@
+Name: mirza
+Attendance: 2025-02-15 23:37:03 - Present
+Sleep Detection: 2025-02-15 23:37:05 - Sleeping Detected
+Phone Usage: 2025-02-15 23:38:05 - Phone Detected
+Name: mirza
+Attendance: 2025-02-15 23:40:18 - Present
+Sleep Detection: 2025-02-15 23:40:23 - Sleeping Detected
