@@ -10,7 +10,7 @@ Behavior Monitoring: Monitors and analyzes student behavior to identify patterns
 Comprehensive Reporting: Generates detailed reports on attendance and behavior for educators and administrators.​
 User-Friendly Interface: Intuitive design ensures ease of use for both staff and students.​
 GitHub
-​## 🏗️ Tech Stack  
+​# 🏗️ Tech Stack  
 - **Backend:** Python with Flask framework  
 - **Frontend:** HTML, CSS  
 - **Database:** SQLite  
