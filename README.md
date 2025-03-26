@@ -20,6 +20,8 @@ AI/ML: OpenCV for facial recognition​
 ### 1️⃣Clone the Repository
 ```sh
 git clone https://github.com/Mirza-Muhammed/SmartClass.git
+
+` ` `
 cd SmartClass
 
 Set Up Virtual Environment 
