@@ -5,11 +5,15 @@ SmartClass: AI-Powered Classroom Management System
 SmartClass is an AI-driven system designed to automate attendance tracking and monitor student behavior in classrooms. By leveraging facial recognition technology, it streamlines administrative tasks and enhances the overall educational experience.​RFID module is responsible for automated attendance tracking using RFID/NFC cards. Each student and teacher is assigned an NFC card, which is scanned at the classroom entrance using an ESP32-based RFID reader. The scanned data is then processed to mark attendance and initiate facial recognition-based behavioral analysis.
 
 # 🌟 Key Features
-Automated Attendance Tracking: Utilizes facial recognition to record student attendance in real-time.​
-Behavior Monitoring: Monitors and analyzes student behavior to identify patterns and provide insights.​
-Comprehensive Reporting: Generates detailed reports on attendance and behavior for educators and administrators.​
-User-Friendly Interface: Intuitive design ensures ease of use for both staff and students.​
-GitHub
+- **NFC Card-Based Attendance:** Each student and teacher uses an NFC card for entry.
+- **ESP32-Based RFID Reader:** Detects and verifies NFC card IDs at the entrance.
+- **Automated Attendance Logging:** Data is sent to the database for real-time tracking.
+- **Teacher-Based Session Activation:**Facial recognition starts only after the teacher's scan.
+- **Automated Attendance Tracking:** Utilizes facial recognition to record student attendance in real-time.​
+- **Behavior Monitoring:** Monitors and analyzes student behavior to identify patterns and provide insights.​
+- **Comprehensive Reporting:** Generates detailed reports on attendance and behavior for educators and administrators.​
+- **User-Friendly Interface:** Intuitive design ensures ease of use for both staff and students.​
+
 
 # 🏗️ Tech Stack  
 - **Backend:** Python with Flask framework  
