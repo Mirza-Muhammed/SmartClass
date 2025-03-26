@@ -16,7 +16,8 @@ Frontend: HTML, CSS​
 Database: SQLite​
 Hardware: ESP32 microcontroller for IoT integration​
 AI/ML: OpenCV for facial recognition​
-# Project Structure 
+# 📂Project Structure 
+` ` `sh
 SmartClass/  
 │── backend/  
 │   │── app.py                  # Main Flask application  
@@ -39,6 +40,7 @@ SmartClass/
 │── README.md                    # Project documentation  
 │── requirements.txt              # Dependencies for the project  
 │── LICENSE                       # License file
+` ` `
 ## ⚡ Installation & Setup
 
 ### 1️⃣ Clone the Repository
